@@ -1,7 +1,6 @@
 const api = "https://reactnd-books-api.udacity.com";
 
 let token = localStorage.token;
-
 if (!token) token = localStorage.token = Math.random().toString(36).substr(-8);
 
 const headers = {
@@ -22,21 +21,15 @@ export const getAll = () =>
 export const update = (book, shelf) =>
   fetch(`${api}/books/${book.id}`, {
     method: "PUT",
-    headers: {
-      ...headers,
-      "Content-Type": "application/json",
-    },
+    headers: { ...headers, "Content-Type": "application/json" },
     body: JSON.stringify({ shelf }),
   }).then((res) => res.json());
 
-export const search = (query, maxResults) =>
+export const search = (query) =>
   fetch(`${api}/search`, {
     method: "POST",
-    headers: {
-      ...headers,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query, maxResults }),
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
   })
     .then((res) => res.json())
-    .then((data) => data.books);
+    .then((data) => data.books || []);
