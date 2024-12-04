@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 
+const shelves = [
+  { id: "currentlyReading", name: "Currently Reading" },
+  { id: "wantToRead", name: "Want to Read" },
+  { id: "read", name: "Read" },
+  { id: "none", name: "None" }
+];
+
 function BookControl({ book, onChangeShelf }) {
   const [value, setValue] = useState(book.shelf);
 
@@ -13,10 +20,11 @@ function BookControl({ book, onChangeShelf }) {
     <div className="book-shelf-changer">
       <select value={value} onChange={handleChange}>
         <option value="move" disabled>Move to...</option>
-        <option value="currentlyReading">Currently Reading</option>
-        <option value="wantToRead">Want to Read</option>
-        <option value="read">Read</option>
-        <option value="none">None</option>
+        {shelves.map((shelf) => (
+          <option key={shelf.id} value={shelf.id}>
+            {shelf.name}
+          </option>
+        ))}
       </select>
     </div>
   );

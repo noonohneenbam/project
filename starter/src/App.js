@@ -37,9 +37,9 @@ function BooksApp() {
   };
 
   const shelves = [
-    { key: "currentlyReading", name: "Books I'm currently reading" },
-    { key: "wantToRead", name: "Books I want to read" },
-    { key: "read", name: "Books I've Read" },
+    { key: "currentlyReading", name: "Currently Reading" },
+    { key: "wantToRead", name: "Want to Read" },
+    { key: "read", name: "Read" },
   ];
 
   return (
@@ -47,19 +47,11 @@ function BooksApp() {
       <Routes>
         <Route
           path="/search"
-          element={
-            <SearchBooks books={books} onChangeShelf={changeShelf} />
-          }
+          element={<SearchBooks books={books} onChangeShelf={changeShelf} />}
         />
         <Route
           path="/"
-          element={
-            <ListBooks
-              books={books}
-              shelves={shelves}
-              onChangeShelf={changeShelf}
-            />
-          }
+          element={<ListBooks books={books} shelves={shelves} onChangeShelf={changeShelf} />}
         />
       </Routes>
     </div>
