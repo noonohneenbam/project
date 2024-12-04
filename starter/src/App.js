@@ -1,36 +1,28 @@
-import React, { Component } from "react";
-import { Routes, Route } from "react-router-dom";
-import * as BooksAPI from "./BooksAPI";
-import "./App.css";
-import ListBooks from "./ListBooks";
-import SearchBooks from "./SearchBooks";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
+import './App.css';
+import ListBooks from './ListBooks';
+import SearchBooks from './SearchBooks';
 
-class BooksApp extends Component {
-  state = {
-    books: [],
-  };
+function BooksApp() {
+  const [books, setBooks] = useState([]);
 
-  componentDidMount() {
+  useEffect(() => {
     BooksAPI.getAll()
-      .then((books) => this.setState({ books }))
+      .then((fetchedBooks) => setBooks(fetchedBooks))
       .catch((error) => console.error("Error fetching books:", error));
-  }
+  }, []);
 
-  shelves = [
-    { key: "currentlyReading", name: "Books I'm Currently Reading" },
-    { key: "wantToRead", name: "My Wish List" },
-    { key: "read", name: "Already Read" },
-  ];
-
-  changeShelf = (book, shelf) => {
+  const changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-      this.setState((state) => {
-        let updatedBooks = state.books.map((b) => {
+      setBooks((prevBooks) => {
+        let updatedBooks = prevBooks.map((b) => {
           if (b.id === book.id) b.shelf = shelf;
           return b;
         });
 
-        if (!state.books.find((b) => b.id === book.id) && shelf !== "none") {
+        if (!prevBooks.find((b) => b.id === book.id) && shelf !== "none") {
           book.shelf = shelf;
           updatedBooks.push(book);
         }
@@ -39,37 +31,39 @@ class BooksApp extends Component {
           updatedBooks = updatedBooks.filter((b) => b.id !== book.id);
         }
 
-        return { books: updatedBooks };
+        return updatedBooks;
       });
     });
   };
 
-  render() {
-    const { books } = this.state;
+  const shelves = [
+    { key: "currentlyReading", name: "Books I'm currently reading" },
+    { key: "wantToRead", name: "Books I want to read" },
+    { key: "read", name: "Books I've Read" },
+  ];
 
-    return (
-      <div className="app">
-        <Routes>
-          <Route
-            path="/search"
-            element={
-              <SearchBooks books={books} onChangeShelf={this.changeShelf} />
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <ListBooks
-                books={books}
-                shelves={this.shelves}
-                onChangeShelf={this.changeShelf}
-              />
-            }
-          />
-        </Routes>
-      </div>
-    );
-  }
+  return (
+    <div className="app">
+      <Routes>
+        <Route
+          path="/search"
+          element={
+            <SearchBooks books={books} onChangeShelf={changeShelf} />
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ListBooks
+              books={books}
+              shelves={shelves}
+              onChangeShelf={changeShelf}
+            />
+          }
+        />
+      </Routes>
+    </div>
+  );
 }
 
 export default BooksApp;

@@ -1,7 +1,6 @@
 import React from 'react';
 import Search from './Search';
 import Bookshelf from './Bookshelf';
-import { Link } from "react-router-dom";
 
 /**
  * ListBooks component that renders a list of books on different shelves.
@@ -23,11 +22,6 @@ class ListBooks extends React.Component {
       <div className="list-books">
         <div className="list-books-title">
           <h1>MyReads</h1>
-          <Link to="/search">
-            <h1 style={{ fontSize: "1.5rem", textDecoration: "none"}}>
-              Click Here To Search For Books
-            </h1>
-          </Link>
         </div>
         <div className="list-books-content">
   {shelves.map((shelf) => {
